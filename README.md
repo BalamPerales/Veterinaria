@@ -1,59 +1,213 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🐾 Veterinaria — Sistema de Gestión
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema de gestión para clínica veterinaria desarrollado con **Laravel 12** y la plantilla **SB Admin 2**. Incluye autenticación por roles, dashboards diferenciados por tipo de usuario y estructura modular de vistas.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ Stack tecnológico
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Tecnología | Versión |
+|---|---|
+| PHP | 8.3 |
+| Laravel | 12.x |
+| Base de datos | MySQL |
+| Plantilla UI | SB Admin 2 (Bootstrap 4) |
+| Autenticación | Laravel Auth (`Auth::attempt`) |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📋 Requisitos previos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP >= 8.2
+- Composer
+- MySQL
+- Servidor web (Apache / Nginx) o `php artisan serve`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🚀 Instalación
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/BalamPerales/Veterinaria.git
+cd Veterinaria
 
-### Premium Partners
+# 2. Instalar dependencias de PHP
+composer install
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# 3. Copiar el archivo de entorno
+cp .env.example .env
 
-## Contributing
+# 4. Generar la clave de aplicación
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Configurar `.env`
 
-## Code of Conduct
+Edita el archivo `.env` y ajusta los valores de base de datos:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```env
+APP_NAME=Veterinaria
+APP_URL=http://localhost
 
-## Security Vulnerabilities
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=veterinaria
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+SESSION_DRIVER=database
+```
 
-## License
+### Migrar y poblar la base de datos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan migrate --seed
+```
+
+> Esto crea todas las tablas y genera automáticamente los **usuarios de prueba** (ver sección de credenciales).
+
+---
+
+## 👤 Usuarios de prueba
+
+| Rol | Email | Contraseña |
+|---|---|---|
+| Administrador | `admin@veterinaria.com` | `admin` |
+| Veterinario | `vet@gmail.com` | `veterinario` |
+
+---
+
+## 🔐 Autenticación y roles
+
+El sistema implementa **redirección automática por rol** al iniciar sesión:
+
+| Rol | Redirige a | URL |
+|---|---|---|
+| `administrador` | Dashboard de administración | `/admin/home` |
+| `veterinario` | Dashboard de veterinario | `/home` |
+
+### Protección de rutas
+
+Las rutas del área de administración (`/admin/*`) están protegidas por el middleware `EsAdministrador`. Si un usuario sin el rol adecuado intenta acceder, recibe un error **403 Forbidden**.
+
+---
+
+## 📁 Estructura de vistas
+
+```
+resources/views/
+├── layouts/
+│   ├── app.blade.php               — Layout principal (veterinario)
+│   ├── auth.blade.php              — Layout de login
+│   ├── admin.blade.php             — Layout del área de administración
+│   ├── partials/                   — Partials del veterinario
+│   │   ├── sidebar.blade.php       — Sidebar azul (bg-gradient-primary)
+│   │   ├── topbar.blade.php
+│   │   ├── footer.blade.php
+│   │   └── logout-modal.blade.php
+│   └── admin/
+│       └── partials/               — Partials del administrador
+│           ├── sidebar.blade.php   — Sidebar rojo (bg-gradient-danger)
+│           ├── topbar.blade.php    — Badge "Admin" visible
+│           ├── footer.blade.php
+│           └── logout-modal.blade.php
+└── modules/
+    ├── auth/
+    │   └── login.blade.php
+    ├── dashboard/
+    │   └── home.blade.php          — Dashboard veterinario
+    └── admin/
+        └── home.blade.php          — Dashboard administrador
+```
+
+---
+
+## 🗺️ Rutas principales
+
+| Método | URL | Nombre | Descripción |
+|---|---|---|---|
+| GET | `/` | `login` | Formulario de login |
+| POST | `/logear` | `logear` | Procesar login |
+| GET | `/home` | `home` | Dashboard veterinario |
+| GET | `/admin/home` | `admin.home` | Dashboard administrador |
+| GET | `/logout` | `logout` | Cerrar sesión |
+
+---
+
+## 🗂️ Estructura de la base de datos
+
+### Tabla `users`
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `id` | bigint | Clave primaria |
+| `name` | varchar | Nombre del usuario |
+| `email` | varchar | Correo (único) |
+| `password` | varchar | Contraseña hasheada (bcrypt) |
+| `rol` | enum | `administrador` \| `veterinario` |
+| `remember_token` | varchar | Token de sesión persistente |
+| `created_at` | timestamp | |
+| `updated_at` | timestamp | |
+
+---
+
+## 🧩 Componentes del sistema
+
+### Middlewares
+
+| Alias | Clase | Descripción |
+|---|---|---|
+| `auth` | Laravel built-in | Requiere sesión iniciada |
+| `guest` | Laravel built-in | Solo usuarios no autenticados |
+| `admin` | `EsAdministrador` | Requiere `rol = administrador` |
+
+### Seeders
+
+| Seeder | Descripción |
+|---|---|
+| `AdminUserSeeder` | Crea el administrador y un veterinario de prueba |
+
+---
+
+## 🎨 Plantilla UI
+
+El proyecto utiliza [SB Admin 2](https://startbootstrap.com/theme/sb-admin-2) (Bootstrap 4), ubicada en:
+
+```
+public/plantilla/startbootstrap-sb-admin-2-gh-pages/
+```
+
+Los assets se referencian con `asset()` directamente desde `public/`, sin compilación con Vite ni npm.
+
+### Diferenciación visual por rol
+
+| Área | Color del sidebar | Identificación |
+|---|---|---|
+| Veterinario | 🔵 Azul (`bg-gradient-primary`) | — |
+| Administrador | 🔴 Rojo (`bg-gradient-danger`) | Badge "Admin" en topbar |
+
+---
+
+## ⚙️ Comandos útiles
+
+```bash
+# Migrar y poblar desde cero
+php artisan migrate:fresh --seed
+
+# Correr solo el seeder
+php artisan db:seed --class=AdminUserSeeder
+
+# Listar todas las rutas
+php artisan route:list
+
+# Iniciar servidor de desarrollo
+php artisan serve
+```
+
+---
+
+## 📄 Licencia
+
+Proyecto académico — sin licencia de distribución.
