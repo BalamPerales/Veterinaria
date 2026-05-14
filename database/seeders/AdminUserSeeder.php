@@ -19,6 +19,17 @@ class AdminUserSeeder extends Seeder
                 'name'     => 'admin',
                 'email'    => 'admin@veterinaria.com',
                 'password' => Hash::make('admin'),
+                'rol'      => 'administrador',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'vet@gmail.com'],
+            [
+                'name'     => 'veterinario',
+                'email'    => 'vet@gmail.com',
+                'password' => Hash::make('veterinario'),
+                'rol'      => 'veterinario',
             ]
         );
     }

@@ -21,7 +21,11 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credenciales)) {
-            return to_route('home');
+            $request->session()->regenerate();
+
+            return Auth::user()->rol === 'administrador'
+                ? to_route('admin.home')
+                : to_route('home');
         } else {
             return to_route('login');
         }
