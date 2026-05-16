@@ -38,11 +38,11 @@
             <i class="fas fa-fw fa-users-cog"></i>
             <span>Usuarios</span>
         </a>
-        <div id="collapseUsuarios" class="collapse" aria-labelledby="headingUsuarios" data-parent="#accordionSidebar">
+        <div id="collapseUsuarios" class="collapse {{ request()->routeIs('admin.usuarios.*') ? 'show' : '' }}" aria-labelledby="headingUsuarios" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Gestión de usuarios:</h6>
-                <a class="collapse-item" href="#">Ver usuarios</a>
-                <a class="collapse-item" href="#">Nuevo usuario</a>
+                <a class="collapse-item {{ request()->routeIs('admin.usuarios.index') ? 'active' : '' }}" href="{{ route('admin.usuarios.index') }}">Ver usuarios</a>
+                <a class="collapse-item {{ request()->routeIs('admin.usuarios.create') ? 'active' : '' }}" href="{{ route('admin.usuarios.create') }}">Nuevo usuario</a>
             </div>
         </div>
     </li>
