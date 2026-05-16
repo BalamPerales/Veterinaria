@@ -80,10 +80,26 @@
     </li>
 
     {{-- ── Configuración ── --}}
-    <li class="nav-item">
+    <li class="nav-item {{ request()->routeIs('admin.configuracion') ? 'active' : '' }}">
         <a class="nav-link" href="#">
             <i class="fas fa-fw fa-cogs"></i>
             <span>Configuración</span>
+        </a>
+    </li>
+
+    {{-- ── Divider ── --}}
+    <hr class="sidebar-divider">
+
+    {{-- ── Heading: Cuenta ── --}}
+    <div class="sidebar-heading">
+        Cuenta
+    </div>
+
+    {{-- ── Mi Perfil ── --}}
+    <li class="nav-item {{ request()->routeIs('admin.perfil') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.perfil') }}">
+            <i class="fas fa-fw fa-user-circle"></i>
+            <span>Mi Perfil</span>
         </a>
     </li>
 

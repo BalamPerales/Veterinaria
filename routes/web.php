@@ -15,5 +15,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/home', [AdminController::class, 'home'])->name('home');
+    Route::get('/home',   [AdminController::class, 'home'])  ->name('home');
+    Route::get('/perfil', [AdminController::class, 'perfil'])->name('perfil');
 });

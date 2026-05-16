@@ -11,4 +11,12 @@ class AdminController extends Controller
     {
         return view('modules/admin/home');
     }
+
+    /**
+     * Perfil / Menú de usuario del administrador.
+     */
+    public function perfil()
+    {
+        return view('modules/admin/perfil');
+    }
 }
