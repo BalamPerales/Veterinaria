@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol',
+        'activo',
     ];
 
     /**
@@ -44,6 +46,15 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'activo' => 'boolean',
         ];
+    }
+
+    /**
+     * Relación con el perfil de veterinario (si tiene el rol correspondiente).
+     */
+    public function veterinario()
+    {
+        return $this->hasOne(Veterinario::class, 'usuario_id');
     }
 }
