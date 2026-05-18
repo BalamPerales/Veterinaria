@@ -28,7 +28,11 @@
     <div id="wrapper">
 
         {{-- ==================== SIDEBAR ADMIN ==================== --}}
-        @include('layouts.admin.partials.sidebar')
+        @sectionMissing('hide_sidebar')
+            @if(Auth::check() && Auth::user()->rol !== 'veterinario')
+                @include('layouts.admin.partials.sidebar')
+            @endif
+        @endif
         {{-- ==================== END SIDEBAR ADMIN ==================== --}}
 
         {{-- ==================== CONTENT WRAPPER ==================== --}}

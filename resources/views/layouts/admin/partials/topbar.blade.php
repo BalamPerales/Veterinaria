@@ -9,6 +9,14 @@
         <i class="fa fa-bars"></i>
     </button>
 
+    {{-- ── Título del Sistema ── --}}
+    <a class="sidebar-brand d-flex align-items-center justify-content-center mr-3 text-decoration-none" href="{{ route('admin.home') }}">
+        <div class="sidebar-brand-icon rotate-n-15 text-danger">
+            <i class="fas fa-paw fa-2x"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3 text-danger font-weight-bold h5 mb-0">VETERINARIA</div>
+    </a>
+
     {{-- ── Búsqueda (desktop) ── --}}
     <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
@@ -21,6 +29,15 @@
             </div>
         </div>
     </form>
+
+    {{-- ── Enlaces Rápidos Topbar ── --}}
+    <ul class="navbar-nav mr-auto ml-4 d-none d-md-flex align-items-center">
+        <li class="nav-item {{ request()->routeIs('expedientes.*') ? 'active' : '' }}">
+            <a class="nav-link font-weight-bold {{ request()->routeIs('expedientes.*') ? 'text-danger' : 'text-gray-800' }}" href="{{ route('expedientes.index') }}">
+                <i class="fas fa-folder-open mr-1"></i> Expedientes
+            </a>
+        </li>
+    </ul>
 
     {{-- ── Right Navbar ── --}}
     <ul class="navbar-nav ml-auto">

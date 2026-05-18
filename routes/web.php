@@ -12,6 +12,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/home', [AuthController::class, 'home'])->name('home');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Módulo de Expedientes
+    Route::get('/expedientes', [\App\Http\Controllers\ExpedienteController::class, 'index'])->name('expedientes.index');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

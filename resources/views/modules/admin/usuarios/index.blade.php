@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('hide_sidebar', true)
+
 @section('titulo_pagina', 'Gestión de Usuarios — Veterinaria')
 
 @section('page_title', 'Usuarios Registrados')
