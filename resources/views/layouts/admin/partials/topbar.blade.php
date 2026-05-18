@@ -17,18 +17,6 @@
         <div class="sidebar-brand-text mx-3 text-danger font-weight-bold h5 mb-0">VETERINARIA</div>
     </a>
 
-    {{-- ── Búsqueda (desktop) ── --}}
-    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small"
-                placeholder="Buscar..." aria-label="Buscar" aria-describedby="admin-search-btn">
-            <div class="input-group-append">
-                <button class="btn btn-danger" type="button" id="admin-search-btn">
-                    <i class="fas fa-search fa-sm"></i>
-                </button>
-            </div>
-        </div>
-    </form>
 
     {{-- ── Enlaces Rápidos Topbar ── --}}
     <ul class="navbar-nav mr-auto ml-4 d-none d-md-flex align-items-center">
@@ -42,26 +30,6 @@
     {{-- ── Right Navbar ── --}}
     <ul class="navbar-nav ml-auto">
 
-        {{-- Búsqueda (solo XS) --}}
-        <li class="nav-item dropdown no-arrow d-sm-none">
-            <a class="nav-link dropdown-toggle" href="#" id="adminSearchDropdown" role="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-search fa-fw"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="adminSearchDropdown">
-                <form class="form-inline mr-auto w-100 navbar-search">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0 small"
-                            placeholder="Buscar..." aria-label="Buscar" aria-describedby="admin-search-btn-xs">
-                        <div class="input-group-append">
-                            <button class="btn btn-danger" type="button" id="admin-search-btn-xs">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </li>
 
         <div class="topbar-divider d-none d-sm-block"></div>
 

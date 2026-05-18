@@ -25,4 +25,33 @@ class ExpedienteController extends Controller
 
         return view('modules.admin.expedientes.index', compact('mascotas', 'query'));
     }
+
+    /**
+     * Búsqueda en tiempo real para JS usando Laravel Scout
+     */
+    public function searchApi(Request $request)
+    {
+        $query = $request->get('q', '');
+        
+        if (empty($query)) {
+            return response()->json([]);
+        }
+
+        // Scout search
+        $resultados = Mascota::search($query)
+            ->query(function ($builder) {
+                $builder->with('dueno');
+            })
+            ->take(5)
+            ->get()
+            ->map(function ($mascota) {
+                return [
+                    'id' => $mascota->id,
+                    'nombre' => $mascota->nombre,
+                    'dueno' => $mascota->dueno->nombre_completo ?? 'Desconocido',
+                ];
+            });
+
+        return response()->json($resultados);
+    }
 }

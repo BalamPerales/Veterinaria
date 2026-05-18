@@ -15,6 +15,7 @@ Route::middleware('auth')->group(function () {
 
     // Módulo de Expedientes
     Route::get('/expedientes', [\App\Http\Controllers\ExpedienteController::class, 'index'])->name('expedientes.index');
+    Route::get('/api/expedientes/search', [\App\Http\Controllers\ExpedienteController::class, 'searchApi'])->name('api.expedientes.search');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

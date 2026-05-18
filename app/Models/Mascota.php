@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Mascota extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $fillable = [
         'dueno_id',
@@ -71,5 +72,17 @@ class Mascota extends Model
     public function historialAlimentacion()
     {
         return $this->hasMany(HistorialAlimentacion::class, 'mascota_id');
+    }
+
+    /**
+     * Definición del índice para Laravel Scout.
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'nombre' => $this->nombre,
+            'dueno_nombre' => $this->dueno ? $this->dueno->nombre_completo : '',
+        ];
     }
 }

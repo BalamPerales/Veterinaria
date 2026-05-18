@@ -32,14 +32,19 @@
                     </div>
 
                     {{-- Control de Búsqueda --}}
-                    <form action="{{ route('expedientes.index') }}" method="GET" class="form-group mb-5">
+                    <form action="{{ route('expedientes.index') }}" method="GET" class="form-group mb-5 position-relative">
                         <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border">
-                            <input type="text" name="q" value="{{ $query ?? '' }}" class="form-control border-0 bg-white px-4" placeholder="Buscar expediente..." aria-label="Buscar expediente" style="box-shadow: none;">
+                            <input type="text" name="q" id="searchInput" value="{{ $query ?? '' }}" autocomplete="off" class="form-control border-0 bg-white px-4" placeholder="Buscar por nombre o folio..." aria-label="Buscar expediente" style="box-shadow: none;">
                             <div class="input-group-append">
                                 <button class="btn btn-primary px-4 border-0" type="submit" style="border-radius: 0;">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
+                        </div>
+                        
+                        {{-- Caja de Sugerencias JS --}}
+                        <div id="searchSuggestions" class="position-absolute w-100 bg-white shadow-lg rounded mt-1 d-none" style="z-index: 1000; text-align: left; max-height: 300px; overflow-y: auto;">
+                            <!-- Los resultados se inyectarán aquí -->
                         </div>
                     </form>
 
@@ -120,3 +125,71 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('searchInput');
+        const suggestionsBox = document.getElementById('searchSuggestions');
+        let timeout = null;
+
+        input.addEventListener('input', function() {
+            clearTimeout(timeout);
+            const query = this.value.trim();
+
+            if (query.length < 2) {
+                suggestionsBox.classList.add('d-none');
+                suggestionsBox.innerHTML = '';
+                return;
+            }
+
+            timeout = setTimeout(() => {
+                fetch(`/api/expedientes/search?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionsBox.innerHTML = '';
+                        if (data.length > 0) {
+                            let html = '<ul class="list-group list-group-flush">';
+                            data.forEach(item => {
+                                html += `
+                                    <li class="list-group-item list-group-item-action suggestion-item" style="cursor: pointer;" data-name="${item.nombre}">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong><i class="fas fa-paw mr-1 text-primary"></i>${item.nombre}</strong>
+                                                <small class="d-block text-muted">Dueño: ${item.dueno}</small>
+                                            </div>
+                                            <span class="badge badge-light badge-pill text-muted">Folio #${item.id}</span>
+                                        </div>
+                                    </li>
+                                `;
+                            });
+                            html += '</ul>';
+                            suggestionsBox.innerHTML = html;
+                            suggestionsBox.classList.remove('d-none');
+
+                            // Click en sugerencia -> llenar input y enviar form
+                            document.querySelectorAll('.suggestion-item').forEach(el => {
+                                el.addEventListener('click', function() {
+                                    input.value = this.getAttribute('data-name');
+                                    suggestionsBox.classList.add('d-none');
+                                    input.closest('form').submit();
+                                });
+                            });
+                        } else {
+                            suggestionsBox.innerHTML = '<div class="p-3 text-muted text-center"><small>No se encontraron resultados inmediatos.</small></div>';
+                            suggestionsBox.classList.remove('d-none');
+                        }
+                    })
+                    .catch(err => console.error("Error fetching search results:", err));
+            }, 300); // 300ms debounce
+        });
+
+        // Ocultar al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!input.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.add('d-none');
+            }
+        });
+    });
+</script>
+@endpush
